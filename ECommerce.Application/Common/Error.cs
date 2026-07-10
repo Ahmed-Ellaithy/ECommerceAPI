@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ECommerce.Application.Common
@@ -30,6 +31,8 @@ namespace ECommerce.Application.Common
             => new Error(code, description, ErrorType.InvalidCredentials);
     }
 
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ErrorType
     {
         Failure=0,
