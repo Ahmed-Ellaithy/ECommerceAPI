@@ -1,6 +1,7 @@
 ﻿using ECommerce.Domin.Contracts;
 using ECommerce.Domin.Entities;
 using ECommerce.Infrastructure.Data;
+using ECommerce.Infrastructure.Specification;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,15 @@ namespace ECommerce.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct = default)
             => await dbContext.Set<TEntity>().ToListAsync(ct);
+
+
+
+        public async Task<IReadOnlyList<TEntity>> GetAllAsync(ISpecification<TEntity, TKey> Spec, CancellationToken ct = default)
+        {
+            var query = SpecificationEvaluator.CreateQuery(dbContext.Set<TEntity>(), Spec);
+
+            return await query.ToListAsync(ct);
+        }
 
         public async Task<TEntity> GetByIdAsync(TKey id, CancellationToken ct = default)
             => await dbContext.Set<TEntity>().FindAsync( id , ct);
